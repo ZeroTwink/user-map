@@ -1,0 +1,21 @@
+#content {
+  position: absolute;
+  left: 310px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  #map {
+    height: 100%;
+  }
+}
+
+//var features = [];
+//var e = 18000000;
+//for (var i = 0; i < this.state.users.length; ++i) {
+//features[i] = new ol.Feature({
+//'geometry': new ol.geom.Point(this.state.users.geometry.coordinates),
+//'i': i,
+//'size': 20
+//});
+//}
