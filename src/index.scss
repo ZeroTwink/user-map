@@ -19,7 +19,8 @@
   box-shadow: 0 5px 10px rgba(0,0,0,.2);
   border: 2px solid #c2e1f5;
   border-radius: 4px;
-  background: #88b7d5;
+  color: rgba(0, 0, 0, 0.87);
+  background: #fff;
 
   &:after, &:before {
     top: 100%;
@@ -34,7 +35,7 @@
 
   &:after {
     border-color: rgba(136, 183, 213, 0);
-    border-top-color: #88b7d5;
+    border-top-color: #fff;
     border-width: 12px;
     margin-left: -12px;
   }
