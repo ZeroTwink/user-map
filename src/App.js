@@ -14,7 +14,7 @@ import Popup from './components/Popup';
 import Item from './components/Item';
 
 const ol = window.ol;
-const moscowCord = [4188426.7147939987, 7508764.236877314];
+const moscowCord = [4188426.7147939987, 7509764.236877314];
 
 class App extends Component {
     constructor(props) {
@@ -155,9 +155,9 @@ class App extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:3007/features")
+        axios.get("http://localhost:3000/features")
             .then(res => {
-                let users = res.data.features.slice(100);
+                let users = res.data.features.slice(900);
 
                 this.props.loadUsers(users);
 
