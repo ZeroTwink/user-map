@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Drawer from 'material-ui/Drawer';
-import Avatar from 'material-ui/Avatar';
-import {List, ListItem} from 'material-ui/List';
-import {blue100} from 'material-ui/styles/colors';
-import RadioButtonChecked from 'material-ui/svg-icons/toggle/radio-button-checked';
+import {List} from 'material-ui/List';
 
 import './index.scss';
 
@@ -14,6 +11,7 @@ import loadUsers from './actions/actionLoadUsers';
 
 import Map from './components/Map';
 import Popup from './components/Popup';
+import Item from './components/Item';
 
 const ol = window.ol;
 const moscowCord = [4188426.7147939987, 7508764.236877314];
@@ -159,7 +157,7 @@ class App extends Component {
     componentDidMount() {
         axios.get("http://localhost:3007/features")
             .then(res => {
-                let users = res.data.features.slice(900);
+                let users = res.data.features.slice(100);
 
                 this.props.loadUsers(users);
 
@@ -176,16 +174,15 @@ class App extends Component {
                 <Drawer open={true} width={310}>
                     <List>
                         {this.props.users.length && this.props.users.map((e, i) => (
-                            <ListItem
+                            <Item
                                 key={e.id}
-                                hoverColor={blue100}
-                                rightIcon={this.state.activeUser === i ?
-                                    <RadioButtonChecked color={this.props.users[i]['properties']['color']} /> : null}
-                                leftAvatar={<Avatar src={e.properties.avatar} />}
-                                onClick={this.clickOnItem.bind(this, i)}
-                                secondaryText={e.properties.email}>
-                                {e.properties.userName}
-                            </ListItem>
+                                isActive={this.state.activeUser === i}
+                                color={this.state.activeUser === i ? this.props.users[i]['properties']['color'] : ""}
+                                avatar={e.properties.avatar}
+                                onClickItem={this.clickOnItem.bind(this, i)}
+                                secondaryText={e.properties.email}
+                                name={e.properties.userName}>
+                            </Item>
                         ))}
                     </List>
                 </Drawer>
