@@ -12,6 +12,9 @@ import axios from 'axios';
 
 import loadUsers from './actions/actionLoadUsers';
 
+import Map from './components/Map';
+import Popup from './components/Popup';
+
 const ol = window.ol;
 const moscowCord = [4188426.7147939987, 7508764.236877314];
 
@@ -111,28 +114,16 @@ class App extends Component {
             if (evt.dragging) {
                 return;
             }
+
             let pixel = map.getEventPixel(evt.originalEvent);
             let hit = map.hasFeatureAtPixel(pixel);
+
             if (hit) {
                 map.getTarget().style.cursor = 'pointer';
             } else {
                 map.getTarget().style.cursor = '';
             }
         });
-    }
-
-    componentDidMount() {
-        axios.get("http://localhost:3007/features")
-            .then(res => {
-                let users = res.data.features.slice(900);
-
-                this.props.loadUsers(users);
-
-                this.drawMap(users);
-            })
-            .catch(error => {
-                console.log(error);
-            });
     }
 
     /**
@@ -165,40 +156,43 @@ class App extends Component {
         });
     }
 
+    componentDidMount() {
+        axios.get("http://localhost:3007/features")
+            .then(res => {
+                let users = res.data.features.slice(900);
+
+                this.props.loadUsers(users);
+
+                this.drawMap(users);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
             <div>
                 <Drawer open={true} width={310}>
                     <List>
-                        {this.props.users.length && this.props.users.map((e, i) => {
-                            return (
-                                <ListItem
-                                    key={e.id}
-                                    hoverColor={blue100}
-                                    rightIcon={this.state.activeUser === i ?
-                                        <RadioButtonChecked color={this.props.users[i]['properties']['color']} /> : null}
-                                    leftAvatar={<Avatar src={e.properties.avatar} />}
-                                    onClick={this.clickOnItem.bind(this, i)}
-                                    secondaryText={e.properties.email}>
-                                    {e.properties.userName}
-                                </ListItem>
-                            )
-                        })}
+                        {this.props.users.length && this.props.users.map((e, i) => (
+                            <ListItem
+                                key={e.id}
+                                hoverColor={blue100}
+                                rightIcon={this.state.activeUser === i ?
+                                    <RadioButtonChecked color={this.props.users[i]['properties']['color']} /> : null}
+                                leftAvatar={<Avatar src={e.properties.avatar} />}
+                                onClick={this.clickOnItem.bind(this, i)}
+                                secondaryText={e.properties.email}>
+                                {e.properties.userName}
+                            </ListItem>
+                        ))}
                     </List>
                 </Drawer>
 
-                <div id="content">
-                    <div id="map" />
-                </div>
+                <Map/>
 
-                <div style={{display: "none"}}>
-                    <div id="popup">
-                        {this.state.userName}
-                        <div style={{color: "rgba(0, 0, 0, 0.54)", fontSize: "13px"}}>
-                            {this.state.userEmail}
-                        </div>
-                    </div>
-                </div>
+                <Popup name={this.state.userName} email={this.state.userEmail} />
             </div>
         );
     }
@@ -212,7 +206,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        loadUsers: function (users) {
+        loadUsers: function(users) {
             dispatch(loadUsers(users));
         }
     }
